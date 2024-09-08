@@ -3,7 +3,6 @@ import { defineConfig, Config } from 'drizzle-kit';
 const config: Config = {
   schema: "./src/drizzle/schema.ts",
   out: './src/drizzle/migrations',
-  driver: "pglite",
   dbCredentials: {
     url: process.env.DATABASE_URL,
   },

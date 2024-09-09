@@ -1,6 +1,6 @@
 import "dotenv/config";
 import { db } from "./drizzle/db";
-import { UserTable } from "./drizzle/schema";
+import { UserPreferenceTable, UserTable } from "./drizzle/schema";
 import { sql } from "drizzle-orm";
 
 const sampleInsert = async () => {
@@ -38,9 +38,18 @@ const sampleInsert = async () => {
 
 async function main() {
   // sampleInsert();
+
+  // await db.insert(UserPreferenceTable).values({
+  //   emailUpdates: true,
+  //   userId: '25fcfa19-a90b-434f-9090-b25d49442161'
+  // })
+
   const users = await db.query.UserTable.findMany({
     columns: { email: false },
     extras: { lowerCaseName: sql<string>`lower(${UserTable.name})`.as("lowerCaseName") },
+    // limit: 1,
+    // offset: 1,
+    with: { preference: true },
   });
   console.log(users);
 }

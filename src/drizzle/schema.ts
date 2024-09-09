@@ -12,6 +12,7 @@ import {
   varchar,
 } from "drizzle-orm/pg-core";
 import { USER_ROLES } from "./constants/user-role";
+import { relations } from "drizzle-orm";
 
 export const UserRole = pgEnum("userRole", Object.values(USER_ROLES) as [string, ...string[]]);
 
@@ -72,3 +73,29 @@ export const PostCategoryTable = pgTable(
     };
   },
 );
+
+// #region RELATIONS
+
+export const UserTableRelations = relations(UserTable, ({ one, many }) => {
+  return {
+    preference: one(UserPreferenceTable),
+    posts: many(PostTable),
+  };
+});
+
+export const UserPreferenceTableRelations = relations(UserPreferenceTable, ({ one }) => {
+  return {
+    user: one(UserTable, {
+      fields: [UserPreferenceTable.userId],
+      references: [UserTable.id],
+    }),
+  };
+});
+
+export const PostTableRelations = relations(PostTable, ({ one, many }) => {
+  return {
+    // user
+  };
+});
+
+// #endregion
